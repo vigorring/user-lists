@@ -20,9 +20,9 @@ export default function RichObjectTreeView() {
         <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
           <div className="p-30">
             <h1 className="text-3xl font-bold mb-10">Please enter your name and pick the Sectors you are currently involved in.</h1>
-            <div className="name-input mb-10">
-              <label className="text-gray-700 text-sm font-bold mb-2">Name : </label>
-              <input className="name"></input>
+            <div className="mb-10 flex items-center">
+              <p className="text-gray-700 text-sm font-bold">Name :</p>
+              <input className="border border-[#5f5f5f] rounded-md ml-2"></input>
             </div>
             <div className="sectors mb-10">
               <label>Sectors : </label>
@@ -41,7 +41,9 @@ export default function RichObjectTreeView() {
               <label>Agree to terms</label>
             </div>
             <div className="actions">
-              <button className="">Save</button>
+              <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-5 px-20 rounded">
+                Save
+              </button>
             </div>
           </div>
         </div>
