@@ -1,28 +1,40 @@
-export const data = {
-  id: "root",
-  name: "Manufacturing",
-  children: [
-    {
-      id: "1",
-      name: "Construction materials",
-    },
-    {
-      id: "3",
-      name: "Electronics and Optics",
-    },
-    {
-      id: "4",
-      name: "Food and Beverage",
-    },
-    {
-      id: "5",
-      name: "Electronics and Optics",
-      children: [
-        {
-          id: "6",
-          name: "Bakery confectionery products",
-        },
-      ],
-    },
-  ],
-};
+export const mockupData = [
+  {
+    id: "1",
+    title: "Manufacturing",
+    childNodes: [
+      {
+        id: "2",
+        parentId: "1",
+        title: "Construction materials"
+      },
+      {
+        id: "3",
+        parentId: "1",
+        title: "Electronics and Optics"
+      },
+      {
+        id: "4",
+        parentId: "1",
+        title: "Food and Beverage",
+        childNodes: [
+          {
+            id: "5",
+            parentId: "4",
+            title: "Bakery & confectionery products",
+          },
+          {
+            id: "6",
+            parentId: "4",
+            title: "Beverages",
+          },
+          {
+            id: "7",
+            parentId: "4",
+            title: "Fish & fish products ",
+          },
+        ],
+      },
+    ],
+  }
+];
