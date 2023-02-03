@@ -6,64 +6,42 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { mockupData } from "../mock/mockdata";
 
 import { Formik, Form, Field } from "formik";
-import * as Yup from "yup";
-
-const DisplayingErrorMessagesSchema = Yup.object().shape({
-  username: Yup.string()
-    .min(2, "Too Short!")
-    .max(50, "Too Long!")
-    .required("Required"),
-  toggle: Yup.boolean().oneOf([true], "Message"),
-});
+import { validationSchema } from "../helper/validator";
+import { listToTree } from "../helper/listToTree";
 
 export default function TreeViewFile() {
   const [selectedNode, setSelectedNode] = useState({});
-  const [selectedRoot, setSelectedRoot] = useState({});
   const [treeViewArr, setTreeViewArr] = useState([]);
-  const [userInfo, setUserInfo] = useState('');
+  const [userInfo, setUserInfo] = useState("");
 
   useEffect(() => {
-    // This will be called for each new value of selectedNode, including the initial empty one
-    // Here is where you can make your API call
-    // console.log("selectedNode", selectedNode);
-    // console.log("selectedRoot", selectedRoot);
-    console.log('change')
     getTreeViewData();
   }, [userInfo]);
 
   const handleChange = (event, nodeId) => {
     treeViewArr.forEach((treeRoot) => {
       if (treeRoot.id === nodeId) {
-        setSelectedRoot(treeRoot);
         setSelectedNode(treeRoot);
         return;
       }
-
       handleSelectedNode(treeRoot.childNodes, treeRoot, nodeId);
     });
   };
 
   const handleSelectedNode = (childNodes, treeRoot, nodeId) => {
-    if (!childNodes) {
-      return;
-    }
-
+    if (!childNodes) return;
     for (let i = 0; i < childNodes.length; i++) {
       let childNode = childNodes[i];
       if (childNode.id === nodeId) {
-        setSelectedRoot(treeRoot);
         setSelectedNode(childNode);
         return;
       }
-
       handleSelectedNode(childNode.childNodes || [], treeRoot, nodeId);
     }
   };
 
   const displayTreeView = (treeViewArray) => {
-    if (!treeViewArray) {
-      return null;
-    }
+    if (!treeViewArray) return null;
     return treeViewArray.map((treeViewItem) => {
       return (
         <TreeItem
@@ -78,13 +56,22 @@ export default function TreeViewFile() {
   };
 
   const getTreeViewData = () => {
-    setTreeViewArr(mockupData)
-  }
+    let treeData = JSON.parse(localStorage.getItem("treeData"));
+    if (!treeData) treeData = mockupData;
+    setTreeViewArr(listToTree(treeData));
+  };
 
   const saveData = (username, selNode) => {
-    console.log(selNode.id)
-    console.log(username)
-    setUserInfo(username)
+    setUserInfo(username);
+    let updateData = JSON.parse(localStorage.getItem("treeData"));
+    if (!updateData) updateData = mockupData;
+    for (let i = 0; i < updateData.length; i++) {
+      if (updateData[i].id === selNode.id) {
+        updateData[i].title = username;
+      }
+    }
+    localStorage.setItem("treeData", JSON.stringify(updateData));
+    setTreeViewArr(listToTree(updateData));
   };
 
   return (
@@ -97,11 +84,8 @@ export default function TreeViewFile() {
                 username: "",
                 toggle: false,
               }}
-              validationSchema={DisplayingErrorMessagesSchema}
+              validationSchema={validationSchema}
               onSubmit={(values) => {
-                // same shape as initial values
-                console.log(values);
-                // save updated data
                 saveData(values.username, selectedNode);
               }}
             >
